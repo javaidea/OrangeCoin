@@ -2,10 +2,6 @@ import fs from 'fs';
 import { ethers } from 'hardhat';
 
 async function main() {
-  const args = process.argv;
-  const i = args.findIndex((x) => x === '--network');
-  const network = i >= 0 && i < args.length ? args[i + 1] : undefined;
-
   const OrangeCoin = await ethers.getContractFactory('OrangeCoin');
 
   const coin = await OrangeCoin.deploy();
@@ -14,6 +10,10 @@ async function main() {
   console.log(`OrangeCoin deployed to ${coin.address}`);
 
   // Save the result into the cache folder
+  // Remove below if you don't want
+  const args = process.argv;
+  const i = args.findIndex((x) => x === '--network');
+  const network = i >= 0 && i < args.length ? args[i + 1] : undefined;
   const deployed = { address: coin.address };
   fs.writeFileSync(
     `./cache/deployed${network ? '_' + network : ''}.json`,
